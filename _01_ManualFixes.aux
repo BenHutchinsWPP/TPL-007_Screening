@@ -1,0 +1,39 @@
+Script
+{
+EnterMode(Edit);
+
+LoadAux("PW_Scripts/Custom Expressions.aux");
+LoadAux("PW_Scripts/GIC_Columns_DynamicFormatting.aux");
+LoadAux("PW_Scripts/GIC_Columns_Inputs_PW.aux");
+
+EnterMode(Run); SolvePowerFlow(RECTNEWT); EnterMode(Edit); 
+}
+
+Script
+{
+EnterMode(Run); SolvePowerFlow(RECTNEWT); EnterMode(Edit);
+
+LoadAux("PW_Scripts/Open_Unused_GSUs.aux",YES);
+LoadAux("PW_Scripts/Solution_Settings_EasySolve.aux",YES);
+EnterMode(Run); SolvePowerFlow(RECTNEWT); EnterMode(Edit);
+LoadAux("PW_Scripts/Solution_Settings_Normal.aux",YES);
+EnterMode(Run); SolvePowerFlow(RECTNEWT); EnterMode(Edit);
+
+LoadAux("PW_Scripts/Autofill_Bus_LatLong_From_Sub.aux",YES);
+LoadAux("PW_Scripts/Autofill_Null_Sub_Rground.aux",YES);
+
+// For Line Rdc values outside of data-check ranges, use PowerFlow R value to derive Rdc. 
+LoadAux("PW_Scripts/GIC_Fix_Line_R_ACDC_Ratio_Bad.aux",YES);
+
+LoadAux("PW_Scripts/Custom Expressions.aux");
+LoadAux("PW_Scripts/GIC_Columns_DynamicFormatting.aux");
+LoadAux("PW_Scripts/GIC_Columns_Inputs_PW.aux");
+
+LoadAux("PW_Scripts/GIC_MonitorAllAreas.aux",YES);
+LoadAux("PW_Scripts/GIC_Options.aux");
+// https://www.powerworld.com/knowledge-base/earth-resistivity-model-for-gic-calculations
+//     "as above, except with 10 regions within Alberta as described in GEOLOGICAL SURVEY OF CANADA OPEN FILE 7906: Space Weather Hazard Assessment for Alberta (original version with dashes)"
+LoadAux("PW_Scripts/NERC_USGS_2017_RegionsAB10_20220208.aux",YES);
+
+SaveCase("01.pwb",PWB23);
+}

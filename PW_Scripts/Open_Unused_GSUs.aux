@@ -1,0 +1,24 @@
+Filter (ObjectType,Name,Logic,LogicNumTrue,FilterPre,Enabled,DataMaintainerAssign)
+{
+// to open generators with at least one closed GSU
+"Gen" "GSU Mixed or Closed" "OR" 0 "NO " "YES" ""
+   <SUBDATA Condition>
+     GSUXFStatus = "Mixed"
+     GSUXFStatus = "Closed"
+   </SUBDATA>
+"Gen" "GSU not used" "AND" 0 "NO " "YES" ""
+   <SUBDATA Condition>
+     Status = "Open"             // generator is open
+     GSUXFGenCountOn isblank     // no in-service generators on the low side
+     GSUXFMWFlow about 0 0.001   // condition needed to exclude GSUs that also serve station load or shunts
+     _UseAnotherFilter meets "GSU Mixed or Closed"  // GSUs with "Transmission Connected" status can't be directly changed, so don't include them; it's also not certain these devices are strictly GSUs
+//     BusNum notinrange "76313, 76314"  // skip special situation in which load-serving transformers are not recognized
+   </SUBDATA>
+}
+
+Script
+{
+// open the GSUs serving open generators
+EnterMode(Run); SolvePowerFlow; EnterMode(Edit); // "GSU not used" filter does not work as intended without solved power flow (GSUXFMWFlow may be non-zero if gen was just opened)
+SetData(Gen, [GSUXFStatus], ["Open"], "GSU not used");
+}

@@ -1,0 +1,51 @@
+
+// Filter for equivalent loads for GIC Mvar losses
+Filter (ObjectType,Name,Logic,LogicNumTrue,FilterPre,Enabled,DataMaintainerAssign)
+{
+"Load" "GIC equivalent" "AND" 1 "NO " "YES" ""
+"Bus" "GIC equivalent" "AND" 1 "NO " "YES" ""
+}
+
+Condition (ObjectType,Filter,CondNum,ObjectField,ConditionType,Value,OtherValue,Absolute)
+{
+"Load" "GIC equivalent" 1 "ID" "=" "GC" "" "NO "
+"Bus" "GIC equivalent" 1 "GICQLosses" ">" "0" "" "NO "
+}
+
+Script
+{
+    EnterMode(Run); SolvePowerFlow(RECTNEWT); EnterMode(Edit);
+
+    // SaveData("filename", filetype, objecttype, [fieldlist], [subdatalist], filter, [SortFieldList], Transpose, Append);
+    SaveData("@CASENAME_Area.csv", CSV, Area, 
+        [ObjectID,Number,Name,
+        GICMvarLosses],
+        [], , [], NO, NO);
+    SaveData("@CASENAME_GICXFormer.csv", CSV, GICXFormer, 
+        [ObjectID,BusNum3W,BusName3W,BusNomVolt,BusNum3W:1,BusName3W:1,BusNomVolt:1,BusNum3W:2,BusName3W:2,BusNomVolt:2,BusNum3W:3,BusName3W:3,BusNomVolt:3,LineCircuit,
+        AreaNum,AreaName,ZoneNum,ZoneName,
+        GICXFIEffective1,GICXFNeutralAmps,GICLineDCFlow,GICLineDCFlow:1,GICQLosses],
+        [], , [], NO, NO);
+    SaveData("@CASENAME_Load.csv", CSV, Bus, 
+        [ObjectID,BusNum,BusName,BusNomVolt,
+        GICQLosses,
+        AreaNumber],
+        [], "GIC equivalent", [], NO, NO);
+    SaveData("@CASENAME_Bus.csv", CSV, Bus, 
+        [ObjectID,BusNum,BusName,BusNomVolt,
+        Vpu,AreaNumber],
+        [], , [], NO, NO);
+    SaveData("@CASENAME_Branch.csv", CSV, Branch, 
+        [ObjectID,BusNumFrom,BusNameFrom,NomkVFrom,BusNumTo,BusNameTo,NomkVTo,Circuit,AreaNumberFrom,AreaNameFrom,ZoneNumberFrom,ZoneNameFrom,
+        GICInducedDCVolt,GICFlowFrom,GICFlowTo,GICFlowMax,GICDCVoltFrom,GICDCVoltTo,GICG,GICMvarLosses,GICLineDistanceMile,GICLineAngle],
+        [], , [], NO, NO);
+    SaveData("@CASENAME_GICHarmScenario.csv", CSV, GICXFormer, 
+        [BusNum3W,BusNum3W:1,BusNum3W:2,LineCircuit,GICXFIEffective1,GICLineDCFlow,GICLineDCFlow:1],
+        [], , [], NO, NO);
+
+    // SaveCase("@CASENAME.raw",PTI35);
+    // SaveCase("@CASENAME.epc",GE23);
+    SaveCase("@CASENAME.pwb",PWB23);
+}
+
+

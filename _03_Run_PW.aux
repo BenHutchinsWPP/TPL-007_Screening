@@ -1,0 +1,51 @@
+Script GIC_Load_Options
+{
+   LogClear;
+   LogAdd(" ---------- GIC Run: Loading GIC_Options.aux ---------- ");
+   LoadAux("PW_Scripts/GIC_Options.aux",YES);
+   LoadAux("PW_Scripts/NERC_USGS_2017_RegionsAB10_20220208",YES);
+}
+
+Script GIC_Save_Inputs
+{
+   LogAdd(" ---------- GIC Run: Saving to PW_Inputs/ ---------- ");
+   SaveCase("TPL-007.pwb", PWB23);
+   LoadAux("PW_Scripts/GIC_Save_Inputs_PW_Format.aux",YES);
+}
+
+Script GIC_Save_Overview
+{
+   LogAdd(" ---------- GIC Run: Running various V/km magnitudes to identify max and min quantities. Saving to PW_V/ ---------- ");
+   GICCalculate(  8,   0, YES); SaveCase("PW_V/08_000.pwb", PWB23); LoadAux("PW_Scripts/GIC_Save_Overview.aux",YES); OpenCase("TPL-007.pwb");
+   GICCalculate( 12,   0, YES); SaveCase("PW_V/12_000.pwb", PWB23); LoadAux("PW_Scripts/GIC_Save_Overview.aux",YES); OpenCase("TPL-007.pwb");
+   GICCalculate( 16,   0, YES); SaveCase("PW_V/16_000.pwb", PWB23); LoadAux("PW_Scripts/GIC_Save_Overview.aux",YES); OpenCase("TPL-007.pwb");
+   GICCalculate( 20,   0, YES); SaveCase("PW_V/20_000.pwb", PWB23); LoadAux("PW_Scripts/GIC_Save_Overview.aux",YES); OpenCase("TPL-007.pwb");
+   GICCalculate( 24,   0, YES); SaveCase("PW_V/24_000.pwb", PWB23); LoadAux("PW_Scripts/GIC_Save_Overview.aux",YES); OpenCase("TPL-007.pwb");
+   GICCalculate( 28,   0, YES); SaveCase("PW_V/28_000.pwb", PWB23); LoadAux("PW_Scripts/GIC_Save_Overview.aux",YES); OpenCase("TPL-007.pwb");
+   GICCalculate( 32,   0, YES); SaveCase("PW_V/32_000.pwb", PWB23); LoadAux("PW_Scripts/GIC_Save_Overview.aux",YES); OpenCase("TPL-007.pwb");
+}
+
+Script GIC_Run_Benchmark_Supplemental
+{
+   LogAdd(" ---------- GIC Run: Running 8V/km and 12V/km at [0,30,60,90,120,150]. Saving to PW_V_Ang/ ---------- ");
+   // MaxField, Direction, SolvePF
+   GICCalculate(  8,   0, YES); SaveCase("PW_V_Ang/08_000.pwb", PWB23); LoadAux("PW_Scripts/GIC_Save.aux",YES); OpenCase("TPL-007.pwb");
+   GICCalculate(  8,  30, YES); SaveCase("PW_V_Ang/08_030.pwb", PWB23); LoadAux("PW_Scripts/GIC_Save.aux",YES); OpenCase("TPL-007.pwb");
+   GICCalculate(  8,  60, YES); SaveCase("PW_V_Ang/08_060.pwb", PWB23); LoadAux("PW_Scripts/GIC_Save.aux",YES); OpenCase("TPL-007.pwb");
+   GICCalculate(  8,  90, YES); SaveCase("PW_V_Ang/08_090.pwb", PWB23); LoadAux("PW_Scripts/GIC_Save.aux",YES); OpenCase("TPL-007.pwb");
+   GICCalculate(  8, 120, YES); SaveCase("PW_V_Ang/08_120.pwb", PWB23); LoadAux("PW_Scripts/GIC_Save.aux",YES); OpenCase("TPL-007.pwb");
+   GICCalculate(  8, 150, YES); SaveCase("PW_V_Ang/08_150.pwb", PWB23); LoadAux("PW_Scripts/GIC_Save.aux",YES); OpenCase("TPL-007.pwb");
+   GICCalculate( 12,   0, YES); SaveCase("PW_V_Ang/12_000.pwb", PWB23); LoadAux("PW_Scripts/GIC_Save.aux",YES); OpenCase("TPL-007.pwb");
+   GICCalculate( 12,  30, YES); SaveCase("PW_V_Ang/12_030.pwb", PWB23); LoadAux("PW_Scripts/GIC_Save.aux",YES); OpenCase("TPL-007.pwb");
+   GICCalculate( 12,  60, YES); SaveCase("PW_V_Ang/12_060.pwb", PWB23); LoadAux("PW_Scripts/GIC_Save.aux",YES); OpenCase("TPL-007.pwb");
+   GICCalculate( 12,  90, YES); SaveCase("PW_V_Ang/12_090.pwb", PWB23); LoadAux("PW_Scripts/GIC_Save.aux",YES); OpenCase("TPL-007.pwb");
+   GICCalculate( 12, 120, YES); SaveCase("PW_V_Ang/12_120.pwb", PWB23); LoadAux("PW_Scripts/GIC_Save.aux",YES); OpenCase("TPL-007.pwb");
+   GICCalculate( 12, 150, YES); SaveCase("PW_V_Ang/12_150.pwb", PWB23); LoadAux("PW_Scripts/GIC_Save.aux",YES); OpenCase("TPL-007.pwb");
+
+   // Save the case in other formats. 
+   OpenCase("TPL-007.pwb");
+   SaveCase("TPL-007.raw", PTI35);
+   SaveCase("TPL-007.epc", GE23);
+
+   LogSave("TPL-007.log",NO);
+}

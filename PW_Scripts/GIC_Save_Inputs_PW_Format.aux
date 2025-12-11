@@ -1,0 +1,96 @@
+CustomExpression (ObjectType,Name,Expression,x1,BlankZero1,EvalInRef1,x2,BlankZero2,EvalInRef2,x3,
+   BlankZero3,EvalInRef3,x4,BlankZero4,EvalInRef4,x5,BlankZero5,EvalInRef5,x6,
+   BlankZero6,EvalInRef6,x7,BlankZero7,EvalInRef7,x8,BlankZero8,EvalInRef8)
+{
+// Rac / Rdc for Line elements. This should be close to 1. 
+// GICCUSTOMR1: This is the data-entry for custom R values. 
+// GICUSEPFR: If this is "YES", PowerWorld uses GICCUSTOMR1 for GICR. If "NO", PowerWorld uses GICPFR1 for GICR. 
+// GICPFR1: This is the R1 resistance in ohms per phase. 
+// GICR: This is the value for Line Resistance that is getting used in the calculations. 
+"Branch:1" "Rac/Rdc" "x2 / x1" "GICR" "YES" "NO " "GICPFR1" "YES" "NO " "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""
+}
+
+Script Save_Inputs_PW_Format
+{
+  // SendtoExcel(objecttype, [fieldlist], filter, UseColumnHeaders, "workbookname", "worksheetname",
+  // [SortFieldList], [Header_List], [Header_Value_List], ClearExisting, RowShift, ColShift);
+
+  SendToExcel(Substation,
+    [ObjectID,
+    Number,Name,
+    Rground,
+    Latitude,Longitude,
+    AreaNumber,ZoneName],
+    ,
+    YES,"TPL-007 Inputs (PW).xlsx","Substation");
+
+  SendToExcel(Bus,
+    [ObjectID,
+    Number,Name,NomkV,
+    Latitude,Longitude,
+    SubNumber,SubName,
+    AreaNumber,DataMaintainer,ZoneName,OwnerName],
+    ,
+    YES,"TPL-007 Inputs (PW).xlsx","Bus");
+
+  // Note: CustomExpression:0 is computed Rac / Rdc.
+  SendToExcel(Branch,
+    [ObjectID,
+    BusNumFrom,BusNameFrom,NomkVFrom,
+    BusNumTo,BusNameTo,NomkVTo,
+    Circuit,
+    GICUSEPFR,GICCUSTOMR1,GICPFR1,
+    CustomExpression:0,
+    GICLineDistanceMile,LineLengthXBMiles,
+    AreaNumberFrom,AreaNumberTo,DataMaintainer,OwnerName1,BranchDeviceType],
+    "BranchDeviceType notcontains 'Transformer'",
+    YES,"TPL-007 Inputs (PW).xlsx","Line");
+
+  SendToExcel(Shunt,
+    [ObjectID,
+    BusNum,BusName,NomkV,
+    ID,
+    GICResistance,
+    BusAreaNumber,DataMaintainer,OwnerName1],
+    ,
+    YES,"TPL-007 Inputs (PW).xlsx","Shunt");
+
+  SendToExcel(LineShunt,
+    [ObjectID,
+    BusNumFrom,BusNameTo,NomkVFrom,
+    BusNumTo,BusNameFrom,NomkVTo,
+    ID,
+    Circuit,
+    Section,
+    GICResistance,
+    AreaNumberFrom,ZoneNameFrom,DataMaintainer],
+    ,
+    YES,"TPL-007 Inputs (PW).xlsx","LineShunt");
+
+  SendToExcel(Branch,
+    [ObjectID,
+    BusNumFrom,BusNameFrom,NomkVFrom,
+    BusNumTo,BusNameTo,NomkVTo,
+    Circuit,
+    BranchDeviceType,
+    XFCoreType,XFConfiguration,XFIsAutoXF,
+    GICManualCoilR,GICCoilRFrom,GICCoilRTo,GICBlockDevice,
+    GICModelParam,GICModelParam:1,GICModelParam:2,GICModelType,
+    AreaNumberFrom,AreaNumberTo,DataMaintainer,OwnerName1],
+    "BranchDeviceType contains 'Transformer'",
+    YES,"TPL-007 Inputs (PW).xlsx","Transformer");
+
+  SendToExcel(GICXFormer,
+    [ObjectID,
+    BusNum3W,BusName3W,BusNomVolt,
+    BusNum3W:1,BusName3W:1,BusNomVolt:1,
+    BusNum3W:2,BusName3W:2,BusNomVolt:2,
+    BusNum3W:3,BusName3W:3,BusNomVolt:3,
+    LineCircuit,
+    XFCoreType,XFConfiguration,XFConfiguration:1,XFConfiguration:2,XFIsAutoXF,
+    GICManualCoilR,GICXFCoilR1,GICXFCoilR1:1,GICXFCoilR1:2,
+    GICBlockDevice,GICModelParam,GICModelParam:1,GICModelParam:2,GICModelType,
+    AreaNum,ZoneName],
+    ,
+    YES,"TPL-007 Inputs (PW).xlsx","GICXFormer");
+}

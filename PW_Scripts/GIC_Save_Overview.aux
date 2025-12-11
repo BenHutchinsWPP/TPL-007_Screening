@@ -1,0 +1,16 @@
+
+Script
+{
+   // SaveData("filename", filetype, objecttype, [fieldlist], [subdatalist], filter, [SortFieldList], Transpose, Append);
+   SaveData("@CASENAME_Area.csv", CSV, Area, 
+      [ObjectID,Number,Name,
+      GICMaxMvarLosses,GICMaxDegrees,GICMinMvarLosses,GICMinDegrees],
+      [], , [], NO, NO);
+    SaveData("@CASENAME_GICXFormer.csv", CSV, GICXFormer, 
+      [ObjectID,BusNum3W,BusName3W,BusNomVolt,BusNum3W:1,BusName3W:1,BusNomVolt:1,BusNum3W:2,BusName3W:2,BusNomVolt:2,BusNum3W:3,BusName3W:3,BusNomVolt:3,LineCircuit,
+      AreaNum,AreaName,ZoneNum,ZoneName,
+      GICMaxIEffective,GICMaxDegrees,GICMaxQLosses,GICMaxAmpsToNeutral3,GICMaxAmpsToNeutral3Degrees],
+      [], , [], NO, NO);
+}
+
+

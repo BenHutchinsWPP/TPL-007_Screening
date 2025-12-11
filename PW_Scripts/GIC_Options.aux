@@ -1,0 +1,62 @@
+
+DATA GIC_Options (GIC_Options, [CalcMode,TimeAutoUpdate,UpdateLineVoltages,TimeSeconds,ScalingCalcMethod,
+   EfieldMagKM,EfieldAngle,CalcMaxDirection,HotSpotValueScalarVKM,
+   HotSpotLatitude,HotSpotLongitude,HotSpotWidthKM,HotSpotHeightKM,
+   CalcInducedDCVoltLength,SegmentLengthKM,CalcInducedDCVoltLowR,
+   IncludeTimeDomain,IncludeTimeDomainDateTime,CalcInducedDCVoltEquiv,
+   AutoXFMaxTurnsRatio,BusNoSub,MSLineBusesGeoEstimatedSave,SubAutoInserted,
+   UnitType,IncludeInPowerFlow,HotSpotInclude,IgnoreInducedDCVoltBelowkV,
+   TransDistMinkV,TransMinkVAlwaysGSU,TransXFConfigDefault,DistXFConfigDefault,
+   MvarLoss1PhK1,MvarLoss3PhShellK1,MvarLoss3Ph3LegK1,MvarLoss3Ph5LegK1,
+   MvarLoss3Ph7LegK1,MvarLossUnkHighK1,MvarLossUnkMedK1,MvarLossUnkLowK1,
+   MvarLoss3PhCoreK1,MvarLoss3Ph3LegBP2,MvarLoss3Ph3LegK2,MvarLoss1PhBP2,
+   MvarLoss1PhK2,MvarLoss3PhShellBP2,MvarLoss3PhShellK2,MvarLoss3Ph5LegBP2,
+   MvarLoss3Ph5LegK2,MvarLoss3Ph7LegBP2,MvarLoss3Ph7LegK2,MvarLossUnkHighBP2,
+   MvarLossUnkHighK2,MvarLossUnkMedBP2,MvarLossUnkMedK2,MvarLossUnkLowBP2,
+   MvarLossUnkLowK2,MvarLoss3PhCoreBP2,MvarLoss3PhCoreK2,GeoMagLatitudeScalar,
+   HotSpotGeoMagLatitudeScalar,GeographicRegionScalar,
+   HotSpotGeographicRegionScalar,HotSpotGeographicRegionHotSpotScalar,
+   TimeVarInputFile,SaveOutputFile,SaveETTMFile,ETTMOutputFile,EField3dFileMerge,
+   EField3dFileNewNamePrompt,EField3dFileMultLoad,EFieldEventsCount,
+   EFieldEventsCountActive,EFieldEventsTimeCount,EFieldEventsRefDateTimeUTC,
+   EFieldEventsRefDateTimeLocal,EFieldEventsfB3DSaveAll,EFieldEventsTimeFirstSec,
+   EFieldEventsTimeLastSec,EFieldEventsTimeLineVoltMax,
+   EFieldEventsTimeSubEFieldMaxVKM])
+{
+"SnapShot" "NO " "YES"  0.000 "Interpolate"  8.000 90.000 "YES" 12.000 45.520 -117.900 1070.000 770.000  1.000  8.047 "NO " "NO " "" "NO "  4.000 "None (Ungrounded)" "NO " "NO " "km" "NO " "YES" 200.000 50.000 300.000 "Delta" "GWye"  1.800  1.450  0.000  1.500  1.200  1.800  1.500  1.500  1.500  0.038  1.750  0.000  1.800  0.000  1.450  0.000  1.500  0.000  1.200  0.000  1.800  0.000  1.500  0.000  1.500  0.000  1.500 "NERC TPL-007.1 and TPL-007.2" "YES" "NERC_USGS_2017" "YES" "YES" "YES" "" "NO " "NO" "YES" "NO " "     3"      0      0      0 "" "" "YES"  0.000  0.000  0.000  0.000
+}
+
+GIC_Options (IncludeInPowerFlow,HotSpotInclude)
+{
+"YES" "NO"
+}
+
+//--------------------------------------------------------------------------------
+// THE FOLLOWING ARE THE GIC OPTIONS AND SETTINGS
+//--------------------------------------------------------------------------------
+GIC_Options (CalcMode,TimeAutoUpdate,UpdateLineVoltages,TimeSeconds,ScalingCalcMethod,
+   EfieldMagKM,EfieldAngle,CalcMaxDirection,HotSpotValueScalarVKM,
+   HotSpotLatitude,HotSpotLongitude,HotSpotWidthKM,HotSpotHeightKM,
+   CalcInducedDCVoltLength,SegmentLengthKM,CalcInducedDCVoltLowR,
+   IncludeTimeDomain,IncludeTimeDomainDateTime,CalcInducedDCVoltEquiv,
+   AutoXFMaxTurnsRatio,BusNoSub,MSLineBusesGeoEstimatedSave,SubAutoInserted,
+   UnitType,IncludeInPowerFlow,HotSpotInclude,IgnoreInducedDCVoltBelowkV,
+   TransDistMinkV,TransMinkVAlwaysGSU,TransXFConfigDefault,DistXFConfigDefault,
+   MvarLoss1PhK1,MvarLoss3PhShellK1,MvarLoss3Ph3LegK1,MvarLoss3Ph5LegK1,
+   MvarLoss3Ph7LegK1,MvarLossUnkHighK1,MvarLossUnkMedK1,MvarLossUnkLowK1,
+   MvarLoss3PhCoreK1,MvarLoss3Ph3LegBP2,MvarLoss3Ph3LegK2,MvarLoss1PhBP2,
+   MvarLoss1PhK2,MvarLoss3PhShellBP2,MvarLoss3PhShellK2,MvarLoss3Ph5LegBP2,
+   MvarLoss3Ph5LegK2,MvarLoss3Ph7LegBP2,MvarLoss3Ph7LegK2,MvarLossUnkHighBP2,
+   MvarLossUnkHighK2,MvarLossUnkMedBP2,MvarLossUnkMedK2,MvarLossUnkLowBP2,
+   MvarLossUnkLowK2,MvarLoss3PhCoreBP2,MvarLoss3PhCoreK2,GeoMagLatitudeScalar,
+   HotSpotGeoMagLatitudeScalar,GeographicRegionScalar,
+   HotSpotGeographicRegionScalar,HotSpotGeographicRegionHotSpotScalar,
+   TimeVarInputFile,SaveOutputFile,SaveETTMFile,ETTMOutputFile,EField3dFileMerge,
+   EField3dFileNewNamePrompt,EField3dFileMultLoad,EFieldEventsCount,
+   EFieldEventsCountActive,EFieldEventsTimeCount,EFieldEventsRefDateTimeUTC,
+   EFieldEventsRefDateTimeLocal,EFieldEventsfB3DSaveAll,EFieldEventsTimeFirstSec,
+   EFieldEventsTimeLastSec,EFieldEventsTimeLineVoltMax,
+   EFieldEventsTimeSubEFieldMaxVKM)
+{
+"SnapShot" "NO " "YES"  0.000 "Interpolate"  0.010 90.000 "YES" 12.000 45.520 -117.900 1070.000 770.000  1.000  8.047 "NO " "NO " "" "NO "  4.000 "None (Ungrounded)" "NO " "NO " "km" "YES" "NO " 200.000 50.000 300.000 "Delta" "GWye"  1.800  1.450  0.000  1.500  1.200  1.800  1.500  1.500  1.500  0.038  1.750  0.000  1.800  0.000  1.450  0.000  1.500  0.000  1.200  0.000  1.800  0.000  1.500  0.000  1.500  0.000  1.500 "NERC TPL-007-4" "YES" "NERC_USGS_2017+AB10" "YES" "YES" "YES" "" "NO " "NO" "YES" "NO " "     3"      0      0      0 "" "" "YES"  0.000  0.000  0.000  0.000
+}

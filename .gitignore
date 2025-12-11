@@ -1,0 +1,27 @@
+# General Exclusions
+*.csv
+
+*.pwb
+*.epc
+*.raw
+*.gic
+*.gmd
+
+*.pwd
+
+*.doc*
+*.xlsx
+*.pptx
+
+*.log
+*.pyc
+
+_Archive/*
+
+# Inclusions
+!TPL-007 Overview.xlsx
+!Blank WECC Map.pwd
+!ACTIVSg2000.PWB
+!PW_Scripts/*.csv
+# !WPP TPL-007 Screening Methodology.docx
+

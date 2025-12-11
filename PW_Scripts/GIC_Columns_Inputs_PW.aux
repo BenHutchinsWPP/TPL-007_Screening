@@ -1,0 +1,252 @@
+CustomExpression (ObjectType,Name,Expression,x1,BlankZero1,EvalInRef1,x2,BlankZero2,EvalInRef2,x3,
+   BlankZero3,EvalInRef3,x4,BlankZero4,EvalInRef4,x5,BlankZero5,EvalInRef5,x6,
+   BlankZero6,EvalInRef6,x7,BlankZero7,EvalInRef7,x8,BlankZero8,EvalInRef8)
+{
+// Rac / Rdc for Line elements. This should be close to 1. 
+// GICCUSTOMR1: This is the data-entry for custom R values. 
+// GICUSEPFR: If this is "YES", PowerWorld uses GICCUSTOMR1 for GICR. If "NO", PowerWorld uses GICPFR1 for GICR. 
+// GICPFR1: This is the R1 resistance in ohms per phase. 
+// GICR: This is the value for Line Resistance that is getting used in the calculations. 
+"Branch:1" "Rac/Rdc" "x2 / x1" "GICR" "YES" "NO " "GICPFR1" "YES" "NO " "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""
+}
+Script
+{
+// Run GICCalculate() to update GICR and related custom expression.
+GICCalculate(  0,   0, YES);
+}
+
+Filter (ObjectType,Name,Logic,LogicNumTrue,FilterPre,Enabled,DataMaintainerAssign)
+{
+"Branch" "Branch_NotTransformer" "AND" 0 "NO " "YES" ""
+}
+Condition (ObjectType,Filter,CondNum,ObjectField,ConditionType,Value,OtherValue,Absolute)
+{
+"Branch" "Branch_NotTransformer" 1 "BranchDeviceType" "notcontains" "Transformer" "" "NO "
+}
+
+DataGrid (Name,FilterPre,RowHeight,FontNonDefault,FontName,FontStyles,FontSize,FontColor,
+   SortVariable,SortOrder,Filter,Zoom,FrozenCols,RemoveTrailingZeros)
+{
+"Substation" "YES"     13 "NO " "Segoe UI" ""      8      0 "Number" "Low To High" "" 100.000 2 "NO "
+   <SUBDATA ColumnInfo>
+     "ObjectID"             113  8 2
+     "Number"                43  8 2
+     "Name"                 204  8 2
+     "Rground"               66  8 2
+     "Latitude"              60  8 5
+     "Longitude"             58  8 5
+   // Extra columns:
+     "Selected"              40  8 2
+     "AreaNumber"            40  8 2
+     "ZoneName"             176  8 3
+    //  "GICRGFlag"             88  8 0 // Text field.
+   </SUBDATA>
+   <SUBDATA ColumnContourInfo>
+   </SUBDATA>
+}
+DataGrid (Name,FilterPre,RowHeight,FontNonDefault,FontName,FontStyles,FontSize,FontColor,
+   SortVariable,SortOrder,Filter,Zoom,FrozenCols,RemoveTrailingZeros)
+{
+"Bus" "YES"     13 "NO " "Segoe UI" ""      8      0 "Number" "Low To High" "" 100.000 2 "NO "
+   <SUBDATA ColumnInfo>
+     "ObjectID"              79  8 2
+     "Number"                65  8 2
+     "Name"                  79  8 3
+     "NomkV"                 79  8 3
+     "Latitude"              61  8 5
+     "Longitude"             64  8 5
+     "SubNumber"             61  8 2
+     "SubName"               79  8 2
+   // Extra columns:
+     "Selected"              40  8 2
+     "AreaNumber"            44  8 3
+     "DataMaintainer"       113  8 3
+     "ZoneName"             138  8 3
+     "OwnerName"            137  8 3
+   </SUBDATA>
+   <SUBDATA ColumnContourInfo>
+   </SUBDATA>
+}
+DataGrid (Name,FilterPre,RowHeight,FontNonDefault,FontName,FontStyles,FontSize,FontColor,
+   SortVariable,SortOrder,Filter,Zoom,FrozenCols,RemoveTrailingZeros)
+{
+"BranchRun" "YES"     13 "NO " "Segoe UI" ""      8      0 "BusNumFrom" "Low To High" "Branch_NotTransformer" 100.000 2 "NO "
+   <SUBDATA ColumnInfo>
+     "ObjectID"             180  8 2
+     "BusNumFrom"            45  9 1
+     "BusNameFrom"           98  9 1
+     "NomkVFrom"             45  9 1
+     "BusNumTo"              45  9 1
+     "BusNameTo"             98  9 1
+     "NomkVTo"               37  9 1
+     "Circuit"               24  9 1
+     "GICUSEPFR"             77  8 4
+     "GICCUSTOMR1"           80  8 2
+     "GICLineDistanceMile"   75  8 2
+     "LineLengthXBMiles"     80  8 2
+     "AreaNumberFrom"        30  9 1
+     "AreaNumberTo"          35  9 1
+     "DataMaintainer"       194  9 1
+     "OwnerName1"           194  9 1
+     "BranchDeviceType"      60  8 2
+   </SUBDATA>
+   <SUBDATA ColumnContourInfo>
+   </SUBDATA>
+}
+DataGrid (Name,FilterPre,RowHeight,FontNonDefault,FontName,FontStyles,FontSize,FontColor,
+   SortVariable,SortOrder,Filter,Zoom,FrozenCols,RemoveTrailingZeros)
+{
+"BranchLineOnlyGrid" "YES"     13 "NO " "Segoe UI" ""      8      0 "BusNumFrom" "Low To High" "Branch_NotTransformer" 100.000 2 "NO "
+   <SUBDATA ColumnInfo>
+     "ObjectID"             180  8 2
+     "BusNumFrom"            45  9 1
+     "BusNameFrom"           98  9 1
+     "NomkVFrom"             45  9 1
+     "BusNumTo"              45  9 1
+     "BusNameTo"             98  9 1
+     "NomkVTo"               37  9 1
+     "Circuit"               24  9 1
+     "GICUSEPFR"             77  8 4 // Yes or No. Yes means to use the custom entered DC Resistance. 
+     "GICCUSTOMR1"           80  8 2 // Custom DC Resistance in Ohms/Phase entered by the user. 
+     "GICPFR1"               80  8 2 // Resistance in Ohms/Phase derived from the PowerFlow R1 (Positive Sequence Resistance). 
+     "CustomExpression:0"    57  9 2 // Rac/Rdc. Should be close to 1.
+     "GICLineDistanceMile"   75  8 2
+     "LineLengthXBMiles"     80  8 2
+     "AreaNumberFrom"        30  9 1
+     "AreaNumberTo"          35  9 1
+     "DataMaintainer"       194  9 1
+     "OwnerName1"           194  9 1
+     "BranchDeviceType"      60  8 2
+   </SUBDATA>
+   <SUBDATA ColumnContourInfo>
+   </SUBDATA>
+}
+DataGrid (Name,FilterPre,RowHeight,FontNonDefault,FontName,FontStyles,FontSize,FontColor,
+   SortVariable,SortOrder,Filter,Zoom,FrozenCols,RemoveTrailingZeros)
+{
+"Shunt" "YES"     13 "NO " "Segoe UI" ""      8      0 "BusNum" "Low To High" "" 100.000 2 "NO "
+   <SUBDATA ColumnInfo>
+     "ObjectID"             115  8 2
+     "BusNum"                50  8 2
+     "BusName"               80  8 3
+     "NomkV"                 38  8 1
+     "ID"                    51  8 2
+     "GICResistance"         69  8 2
+   // Extra columns:
+     "Selected"              40  8 2
+     "BusAreaNumber"         36  8 3
+     "DataMaintainer"       137  8 3
+     "OwnerName1"           179  8 3
+   </SUBDATA>
+   <SUBDATA ColumnContourInfo>
+   </SUBDATA>
+}
+DataGrid (Name,FilterPre,RowHeight,FontNonDefault,FontName,FontStyles,FontSize,FontColor,
+   SortVariable,SortOrder,Filter,Zoom,FrozenCols,RemoveTrailingZeros)
+{
+"GICXFormer" "YES"     13 "NO " "Segoe UI" ""      8      0 "GICMaxIEffective" "High To Low" "" 100.000 2 "NO "
+   <SUBDATA ColumnInfo>
+     "ObjectID"              56  8 2
+     "BusNum3W"              42  8 2
+     "BusName3W"             79  8 3
+     "BusNomVolt"            40  8 1
+     "BusNum3W:1"            40  8 2
+     "BusName3W:1"           79  8 3
+     "BusNomVolt:1"          42  8 1
+     "BusNum3W:2"            40  8 2
+     "BusName3W:2"           77  8 3
+     "BusNomVolt:2"          40  8 1
+     "BusNum3W:3"            40  8 2
+     "BusName3W:3"           74  8 3
+     "BusNomVolt:3"          42  8 1
+     "LineCircuit"           40  8 2
+     "XFCoreType"           142  8 2
+     "XFConfiguration"       64  8 2
+     "XFConfiguration:1"     63  8 2
+     "XFConfiguration:2"     64  8 2
+     "XFIsAutoXF"            61  8 2
+     "GICManualCoilR"        69  8 2
+     "GICXFCoilR1"           63  8 3
+     "GICXFCoilR1:1"         69  8 3
+     "GICXFCoilR1:2"         62  8 3
+     "GICBlockDevice"        69  8 2
+     "GICModelParam"         53  8 2
+     "GICModelParam:1"       51  8 2
+     "GICModelParam:2"       51  8 2
+     "GICModelType"          69  8 2
+   // Extra columns:
+     "Selected"              40  8 2
+     "AreaNum"               42  8 3
+     "ZoneName"             179  8 3
+     "GICMaxIEffective"      40  8 1
+     "GICMaxDegrees"         40  8 1
+     "GICXFConfigUsed"      100  8 2
+     "GICAutoXFUsed"         40  8 2
+   </SUBDATA>
+   <SUBDATA ColumnContourInfo>
+   </SUBDATA>
+}
+DataGrid (Name,FilterPre,RowHeight,FontNonDefault,FontName,FontStyles,FontSize,FontColor,
+   SortVariable,SortOrder,Filter,Zoom,FrozenCols,RemoveTrailingZeros)
+{
+"BranchTransformerOnlyGrid" "YES"     13 "NO " "Segoe UI" ""      8      0 "" "High To Low" "" 100.000 2 "NO "
+   <SUBDATA ColumnInfo>
+     "ObjectID"             180  8 2
+     "BusNumFrom"            40  9 1
+     "BusNameFrom"           80  9 1
+     "NomkVFrom"             40  9 1
+     "BusNumTo"              40  9 1
+     "BusNameTo"             80  9 1
+     "NomkVTo"               40  9 1
+     "Circuit"               47  9 1
+     "BranchDeviceType"      47  9 1
+     "XFCoreType"           142  8 2
+     "XFConfiguration"       64  8 2
+     "XFIsAutoXF"            61  8 2
+     "GICManualCoilR"        69  8 2
+     "GICCoilRFrom"          63  8 3
+     "GICCoilRTo"            69  8 3
+     "GICBlockDevice"        69  8 2
+     "GICModelParam"         53  8 2
+     "GICModelParam:1"       51  8 2
+     "GICModelParam:2"       51  8 2
+     "GICModelType"          69  8 2
+   // Extra columns:
+     "Selected"              40  8 2
+     "GICMaxIEffective"      40  8 1
+     "GICMaxDegrees"         40  8 1
+   //   "GICXFConfigUsed"      100  8 2 // Not available in Branch table, only GICXFormer.
+   //   "GICAutoXFUsed"         40  8 2 // Not available in Branch table, only GICXFormer.
+     "AreaNumberFrom"        40  8 3
+     "AreaNumberTo"          40  8 3
+     "DataMaintainer"       117  8 3
+     "OwnerName1"           139  8 3
+   </SUBDATA>
+   <SUBDATA ColumnContourInfo>
+   </SUBDATA>
+}
+DataGrid (Name,FilterPre,RowHeight,FontNonDefault,FontName,FontStyles,FontSize,FontColor,
+   SortVariable,SortOrder,Filter,Zoom,FrozenCols,RemoveTrailingZeros)
+{
+"LineShunt" "YES"     13 "NO " "Segoe UI" ""      8      0 "" "Low To High" "" 100.000 2 "NO "
+   <SUBDATA ColumnInfo>
+     "ObjectID"             200  8 2
+     "BusNumFrom"            57  8 2
+     "BusNameTo"            106  8 2
+     "NomkVFrom"             52  8 2
+     "BusNumTo"              52  8 2
+     "BusNameFrom"           84  8 2
+     "NomkVTo"               47  8 2
+     "ID"                    33  8 2
+     "Circuit"               45  8 2
+     "Section"               51  8 2
+     "GICResistance"         58  8 2
+   // Extra columns:
+     "Selected"              40  8 2
+     "AreaNumberFrom"        75  8 2
+     "ZoneNameFrom"          75  8 2
+     "DataMaintainer"        75  8 2
+   </SUBDATA>
+   <SUBDATA ColumnContourInfo>
+   </SUBDATA>
+}

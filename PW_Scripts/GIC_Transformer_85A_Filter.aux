@@ -1,0 +1,62 @@
+DATA (Filter, [ObjectType,FilterName,FilterLogic,Number,FilterPre,Enabled,DataMaintainerAssign])
+{
+"GICXFormer" "GIC_85A" "AND" 0 "NO " "YES" ""
+}
+
+DATA (Condition, [ObjectType,FilterName,ConditionNumber,VariableName,ConditionType,ConditionValue,
+   ConditionValue:1,ConditionCaseAbs])
+{
+"GICXFormer" "GIC_85A" 1 "GICMaxIEffective" ">" "85" "" "NO "
+}
+
+DATA (DataGrid, [DataGridName,BGDisplayFilter,CaseInfoRowHeight,NonDefaultFont,FontName,
+   FontStyles,SOFontSize,FontColor,VariableName,ConditionType,FilterName,
+   ViewZoomLevel,FrozenColumns,RemoveTrailingZeros])
+{
+"GICXFormer" "YES"     13 "NO " "Segoe UI" ""      8      0 "GICMaxIEffective" "High To Low" "GIC_85A" 100.000 1 "NO "
+   <SUBDATA ColumnInfo>
+     "BusNum3W"              80  8 0
+     "BusName3W"             80  8 0
+     "BusNum3W:1"            80  8 0
+     "BusName3W:1"           80  8 0
+     "BusNum3W:2"            80  8 0
+     "BusName3W:2"           80  8 0
+     "LineCircuit"           80  8 0
+     "GICMaxDegrees"         80  8 1
+     "GICMaxIEffective"      80  8 1
+     "GICMaxAmpsToNeutral3Degrees"  80  8 1
+     "GICMaxAmpsToNeutral3"  80  8 2
+     "GICXFIEffective1"      80  8 3
+     "GICXFIEffective1PU"    80  8 3
+     "GICQLosses"            80  8 2
+     "GICMaxQLosses"         80  8 2
+     "GICXFNeutralAmps"      80  8 3
+     "GICIgnoreLosses"       60  8 0
+     "GICBlockDevice"        70  8 0
+     "GICXFNeutralR"         80  8 3
+     "GICManualCoilR"        60  8 0
+     "GICXFCoilR1"           80  8 5
+     "GICXFCoilR1:1"         80  8 5
+     "GICXFCoilR1:2"         80  8 5
+     "XFConfiguration"       50  8 0
+     "XFConfiguration:1"     50  8 0
+     "XFConfiguration:2"     50  8 0
+     "GICXFConfigUsed"       80  8 0
+     "XFIsAutoXF"            70  9 2
+     "GICAutoXFUsed"         70  9 0
+     "XFCoreType"           100  9 2
+     "GICModelType"          80  9 2
+     "GICModelParam"         80  8 3
+     "GICModelParam:1"       80  8 3
+     "GICModelParam:2"       80  8 3
+     "GICModelKUsed"         80  8 4
+     "GICModelKUsed:1"       80  8 4
+     "GICModelKUsed:2"       80  8 4
+     "GICLineDCFlow"         80  8 2
+     "GICLineDCFlow:1"       80  8 2
+     "BusNum3W:3"            80  8 0
+     "BusName3W:3"           80  8 0
+   </SUBDATA>
+   <SUBDATA ColumnContourInfo>
+   </SUBDATA>
+}

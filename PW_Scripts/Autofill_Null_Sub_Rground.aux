@@ -1,0 +1,14 @@
+Filter (ObjectType,Name,Logic,LogicNumTrue,FilterPre,Enabled,DataMaintainerAssign)
+{
+// substations with Null or unrealistic grounding resistance values
+"Substation" "NullRGnd" "AND" 0 "NO " "YES" ""
+   <SUBDATA Condition>
+     Rground < 0.001
+   </SUBDATA>
+}
+
+Script
+{
+// Set substation grounding resistance for subs with null inputs to 0.1 ohm
+SetData(Substation, [Rground], [0.1], "NullRGnd");
+}
