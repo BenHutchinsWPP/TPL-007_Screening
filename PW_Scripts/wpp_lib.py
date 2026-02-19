@@ -39,7 +39,7 @@ def get_param_df(SimAuto, table: str, parameter_type: dict[str,type], filter_gro
     # Pack into a dataframe. 
     df = pd.DataFrame(data=rows, columns=parameter_list)
     # Trim all strings. 
-    df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+    df = df.map(lambda x: x.strip() if isinstance(x, str) else x)
     # Change all data types to the proper types. 
     for parameter in parameter_list:
         if(parameter_type[parameter] in [int, float]):
