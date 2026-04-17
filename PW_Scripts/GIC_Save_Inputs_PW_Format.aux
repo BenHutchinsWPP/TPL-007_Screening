@@ -46,13 +46,14 @@ Script Save_Inputs_PW_Format
     "BranchDeviceType notcontains 'Transformer'",
     YES,"TPL-007 Inputs (PW).xlsx","Line");
 
+  // Save out only Shunt Reactors. Capacitors do not have DC grounding resistance. 
   SendToExcel(Shunt,
     [ObjectID,
     BusNum,BusName,NomkV,
     ID,
     GICResistance,
     BusAreaNumber,DataMaintainer,OwnerName1],
-    ,
+    "MvarNomMin < 0",
     YES,"TPL-007 Inputs (PW).xlsx","Shunt");
 
   SendToExcel(LineShunt,
@@ -67,6 +68,9 @@ Script Save_Inputs_PW_Format
     ,
     YES,"TPL-007 Inputs (PW).xlsx","LineShunt");
 
+  // Save 2-Winding transformer data. 
+  // ... Technically, you can also save 3-Winding data here if desired by doing "contains" 'Transformer', but 
+  // filling it out in the 2-winding table may be confusing when thinking in terms of DC network components. 
   SendToExcel(Branch,
     [ObjectID,
     BusNumFrom,BusNameFrom,NomkVFrom,
@@ -77,9 +81,10 @@ Script Save_Inputs_PW_Format
     GICManualCoilR,GICCoilRFrom,GICCoilRTo,GICBlockDevice,
     GICModelParam,GICModelParam:1,GICModelParam:2,GICModelType,
     AreaNumberFrom,AreaNumberTo,DataMaintainer,OwnerName1],
-    "BranchDeviceType contains 'Transformer'",
+    "BranchDeviceType equal 'Transformer'",
     YES,"TPL-007 Inputs (PW).xlsx","Transformer");
 
+  // Save 3-Winding data. 
   SendToExcel(GICXFormer,
     [ObjectID,
     BusNum3W,BusName3W,BusNomVolt,

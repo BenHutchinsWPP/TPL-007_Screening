@@ -5,7 +5,7 @@ import win32com.client
 
 mva_mismatch_threshold = 1.0 
 
-def chk(SimAuto, SimAutoOutput, Message):
+def chk(SimAuto, SimAutoOutput, Message) -> list[list[str]]:
     """
     Function used to catch and display errors passed back from SimAuto
 
@@ -27,26 +27,70 @@ def chk(SimAuto, SimAutoOutput, Message):
     else:
         return SimAutoOutput[1:]
 
-def get_param(SimAuto, table: str, parameters: list[str], filter_group: str = ''):
+def get_param(SimAuto, table: str, parameters: list[str], filter_group: str = '') -> list[list[str]]:
     msg = 'GetParametersMultipleElementRect(' + table + ': [' + ', '.join(parameters) + '])'
-    return_value = chk(SimAuto, SimAuto.GetParametersMultipleElementRect(table, parameters, filter_group), msg)
+    return_value: list[list[str]] = chk(SimAuto, SimAuto.GetParametersMultipleElementRect(table, parameters, filter_group), msg)
     return return_value
 
-def get_param_df(SimAuto, table: str, parameter_type: dict[str,type], filter_group: str = '') -> pd.DataFrame:
+def get_table_types(SimAuto, table: str) -> dict[str,str]:
+    columns = ['key', 'variablenamelegacy', 'type', 'description', 'concisename', 'enterable']
+    fields_df = pd.DataFrame(SimAuto.GetFieldList(table)[1], columns=columns)
+
+    type_map = {
+        "String": "string",
+        "Integer": "Int64",   # nullable integer
+        "Real": "Float64"     # nullable float
+    }
+
+    table_types = {
+        row["concisename"]: type_map[row["type"]]
+        for _, row in fields_df.iterrows()
+    }
+
+    return table_types
+
+def get_param_df(SimAuto, table: str, parameter_type: dict[str,type] | list[str], filter_group: str = '') -> pd.DataFrame:
+    def deep_strip(obj):
+        if isinstance(obj, str):
+            return obj.strip()
+        elif isinstance(obj, tuple):
+            return tuple(deep_strip(x) for x in obj)
+        elif isinstance(obj, list):
+            return [deep_strip(x) for x in obj]
+        elif isinstance(obj, dict):
+            return {k: deep_strip(v) for k, v in obj.items()}
+        elif isinstance(obj, set):
+            return {deep_strip(x) for x in obj}
+        else:
+            return obj
+
+    def apply_table_types(df, table_types):
+        for col, dtype in table_types.items():
+            if col not in df.columns:
+                continue  # skip missing columns
+
+            if dtype == "string":
+                df[col] = df[col].astype("string")
+            else:
+                df[col] = pd.to_numeric(
+                    df[col].replace("", pd.NA),
+                    errors="coerce"
+                ).astype(dtype)
+        return df
+
     # Get data from PowerWorld. 
-    parameter_list: list[str] = list(parameter_type.keys())
+    if type(parameter_type) == dict:
+        parameter_list: list[str] = list(parameter_type.keys())
+    else:
+        parameter_list: list[str] = parameter_type
     rows: list[list[str]] = get_param(SimAuto, table, parameter_list, filter_group)
+    trimmed_rows = deep_strip(rows)
+
     # Pack into a dataframe. 
-    df = pd.DataFrame(data=rows, columns=parameter_list)
-    # Trim all strings. 
-    df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
-    # Change all data types to the proper types. 
-    for parameter in parameter_list:
-        if(parameter_type[parameter] in [int, float]):
-            # Handle numeric types with coerce for empty strings. 
-            df[parameter] = pd.to_numeric(df[parameter], errors='coerce')
-        else: 
-            df[parameter] = df[parameter].astype(parameter_type[parameter])
+    table_types = get_table_types(SimAuto, table)
+    df = pd.DataFrame(data=trimmed_rows, columns=parameter_list)
+    df = apply_table_types(df, table_types)
+
     return df
 
 def set_param(SimAuto, table: str, parameters: list[str], rows: list[list[str]]):
@@ -54,7 +98,7 @@ def set_param(SimAuto, table: str, parameters: list[str], rows: list[list[str]])
     return_value = chk(SimAuto, SimAuto.ChangeParametersMultipleElementRect(table, parameters, rows), msg)
     return return_value
 
-def set_param_df(SimAuto, table, df: pd.DataFrame):
+def set_param_df(SimAuto, table: str, df: pd.DataFrame):
     df = df.reset_index()
     if(len(df) == 0):
         return ''
@@ -62,7 +106,7 @@ def set_param_df(SimAuto, table, df: pd.DataFrame):
     # Get parameters. 
     parameters: list[str] = df.columns.tolist()
     # Convert df into list of lists. All numerical values which are "nan" must be treated as empty strings. 
-    rows: list[list[str]] = df.fillna('').astype(str).values.tolist()
+    rows: list[list[str]] = df.astype("string").fillna("").values.tolist()
     # Set data in PowerWorld. 
     return_value = set_param(SimAuto, table, parameters, rows)
     return return_value

@@ -1,9 +1,15 @@
+CaseInfo_Options_Value (Option,Value)
+{
+"UseConciseVariableNames"          "YES"
+"UseDefinedNamesInVariables"       "NO"
+}
+
 Script GIC_Load_Options
 {
    LogClear;
    LogAdd(" ---------- GIC Run: Loading GIC_Options.aux ---------- ");
    LoadAux("PW_Scripts/GIC_Options.aux",YES);
-   LoadAux("PW_Scripts/NERC_USGS_2017_RegionsAB10_20220208",YES);
+   LoadAux("PW_Scripts/NERC_USGS_2017_RegionsAB10_20220208.aux",YES);
 }
 
 Script GIC_Save_Inputs
