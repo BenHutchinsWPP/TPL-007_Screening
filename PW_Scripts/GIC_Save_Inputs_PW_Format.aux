@@ -22,7 +22,7 @@ Script Save_Inputs_PW_Format
     Latitude,Longitude,
     AreaNumber,ZoneName],
     ,
-    YES,"TPL-007 Inputs (PW).xlsx","Substation");
+    YES,"@CASEFILEPATH/TPL-007 Inputs (PW).xlsx","Substation");
 
   SendToExcel(Bus,
     [ObjectID,
@@ -31,7 +31,7 @@ Script Save_Inputs_PW_Format
     SubNumber,SubName,
     AreaNumber,DataMaintainer,ZoneName,OwnerName],
     ,
-    YES,"TPL-007 Inputs (PW).xlsx","Bus");
+    YES,"@CASEFILEPATH/TPL-007 Inputs (PW).xlsx","Bus");
 
   // Note: CustomExpression:0 is computed Rac / Rdc.
   SendToExcel(Branch,
@@ -44,7 +44,7 @@ Script Save_Inputs_PW_Format
     GICLineDistanceMile,LineLengthXBMiles,
     AreaNumberFrom,AreaNumberTo,DataMaintainer,OwnerName1,BranchDeviceType],
     "BranchDeviceType notcontains 'Transformer'",
-    YES,"TPL-007 Inputs (PW).xlsx","Line");
+    YES,"@CASEFILEPATH/TPL-007 Inputs (PW).xlsx","Line");
 
   // Save out only Shunt Reactors. Capacitors do not have DC grounding resistance. 
   SendToExcel(Shunt,
@@ -54,7 +54,7 @@ Script Save_Inputs_PW_Format
     GICResistance,
     BusAreaNumber,DataMaintainer,OwnerName1],
     "MvarNomMin < 0",
-    YES,"TPL-007 Inputs (PW).xlsx","Shunt");
+    YES,"@CASEFILEPATH/TPL-007 Inputs (PW).xlsx","Shunt");
 
   SendToExcel(LineShunt,
     [ObjectID,
@@ -66,7 +66,7 @@ Script Save_Inputs_PW_Format
     GICResistance,
     AreaNumberFrom,ZoneNameFrom,DataMaintainer],
     ,
-    YES,"TPL-007 Inputs (PW).xlsx","LineShunt");
+    YES,"@CASEFILEPATH/TPL-007 Inputs (PW).xlsx","LineShunt");
 
   // Save 2-Winding transformer data. 
   // ... Technically, you can also save 3-Winding data here if desired by doing "contains" 'Transformer', but 
@@ -82,7 +82,7 @@ Script Save_Inputs_PW_Format
     GICModelParam,GICModelParam:1,GICModelParam:2,GICModelType,
     AreaNumberFrom,AreaNumberTo,DataMaintainer,OwnerName1],
     "BranchDeviceType equal 'Transformer'",
-    YES,"TPL-007 Inputs (PW).xlsx","Transformer");
+    YES,"@CASEFILEPATH/TPL-007 Inputs (PW).xlsx","Transformer");
 
   // Save 3-Winding data. 
   SendToExcel(GICXFormer,
@@ -97,5 +97,5 @@ Script Save_Inputs_PW_Format
     GICBlockDevice,GICModelParam,GICModelParam:1,GICModelParam:2,GICModelType,
     AreaNum,ZoneName],
     ,
-    YES,"TPL-007 Inputs (PW).xlsx","GICXFormer");
+    YES,"@CASEFILEPATH/TPL-007 Inputs (PW).xlsx","GICXFormer");
 }
